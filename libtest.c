@@ -14,12 +14,30 @@
 #include "libtest.h" 
 #include "libtest_def.h" 
 
+// void libtest_init_entry(void *p)
+// {
+//     libtest_usage_init(); 
+//     LOG_I("libtest init successful."); 
+// }
+
 int libtest_init(void)
 {
-    libtest_usage_init(); 
+    // rt_thread_t thread = RT_NULL; 
 
+    // thread = rt_thread_create("libtest_init", libtest_init_entry, 
+    //     RT_NULL, 512, 30, 10); 
+    // if(thread == RT_NULL)
+    // {
+    //     LOG_E("libtest init failed."); 
+    //     return RT_EOK; 
+    // }
+    // rt_thread_startup(thread); 
+
+    libtest_usage_init(); 
     LOG_I("libtest init successful."); 
 
     return RT_EOK; 
 }
-INIT_COMPONENT_EXPORT(libtest_init); 
+INIT_APP_EXPORT(libtest_init); 
+
+// 开机自定义测试指令. 

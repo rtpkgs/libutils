@@ -36,47 +36,6 @@ static void libtest_usage_view_entry(void *p)
 
     while(1)
     {
-#if defined(LIBTEST_USING_USAGE_VIEW_TAIL)
-        if(usage_view == RT_FALSE)
-        {
-            rt_kprintf("\33[s");            // 保存位置
-            for(index = 0; index < 10; index++)
-            {
-                rt_kprintf("\33[1A");       // 上移动一行
-                rt_kprintf("\33[10000C");   // 移动到末尾
-                rt_kprintf("\33[11D\33[K"); // 回退光标到插件显示处, 并删除后面几行
-            }
-            rt_kprintf("\33[u");            // 恢复位置
-        }
-
-        while(usage_view == RT_FALSE)
-        {
-            rt_thread_mdelay(500); 
-        }
-
-        rt_kprintf("\33[?25l");         // 隐藏光标
-
-        rt_kprintf("\33[s");            // 保存位置
-        for(index = 0; index < 15; index++)
-        {
-            rt_kprintf("\33[1A");       // 上移动一行
-            rt_kprintf("\33[10000C");   // 移动到末尾
-            rt_kprintf("\33[11D\33[K"); // 回退光标到插件显示处, 并删除后面几行
-        }
-        rt_kprintf("\33[u");            // 恢复位置
-         
-        rt_kprintf("\33[s");            // 保持位置
-        rt_kprintf("\33[10000C");
-        rt_kprintf("\33[11D");
-        rt_kprintf("\33[37;41m"); 
-        rt_kprintf("[cpu %.2d.%.2d%%]", major, minor); 
-        rt_kprintf("\33[0m");
-        rt_kprintf("\33[u");            // 恢复位置
-
-        rt_kprintf("\33[?25h");         // 显示光标
-#endif 
-
-#if defined(LIBTEST_USING_USAGE_VIEW_HEAD)
         while(usage_view == RT_FALSE)
         {
             rt_thread_mdelay(500); 
@@ -92,9 +51,8 @@ static void libtest_usage_view_entry(void *p)
         rt_kprintf("\33[0m");
         rt_kprintf("\33[u");            // 恢复位置
         rt_kprintf("\33[?25h");         // 显示光标
-#endif 
 
-        rt_thread_mdelay(200);       
+        rt_thread_mdelay(200);
     }
 }
 

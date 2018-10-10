@@ -17,8 +17,6 @@ inc = inc + [cwd + "/testcases"]
 src = src + ['./utils/libtest_hash.c']
 src = src + ['./utils/libtest_usage.c']
 
-src = src + ['./testcases/libtest_player.c']
-
 # add group to IDE project
 objs = DefineGroup('libtest-1.0.0', src, depend = ['PKG_USING_LIBTEST'], CPPPATH = inc)
 

@@ -17,10 +17,13 @@ void libtest_hexdump(const rt_uint8_t *p, rt_size_t len)
 {
     unsigned char *buf = (unsigned char*)p;
     int i, j;
+    
+    rt_kprintf("Dump 0x%.8x %dBytes\n", (int)p, len); 
+    rt_kprintf("Offset    0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F\n"); 
 
     for (i=0; i<len; i+=16)
     {
-        rt_kprintf("%08X: ", i);
+        rt_kprintf("%08X: ", i+(int)p);
 
         for (j=0; j<16; j++)
         {

@@ -56,7 +56,7 @@ static void libtest_usage_view_entry(void *p)
 
 static void _delay(rt_uint32_t us)
 {
-    rt_int32_t i;
+    volatile rt_int32_t i;
     for (; us > 0; us--)
     {
         i = 30;
@@ -71,7 +71,7 @@ static void libtest_usage_load_entry(void *p)
 {
     while(1) 
     {
-        _delay(usage_load * 10); 
+        _delay(usage_load); 
         rt_thread_mdelay(1); 
     }
 }

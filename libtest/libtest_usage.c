@@ -12,28 +12,26 @@
  */
 
 #include "libtest_usage.h" 
-#include "libtest_def.h" 
 #include "optparse.h"
 #include "string.h"
+#include <stdlib.h>
 
 static rt_uint8_t  major = 0; 
 static rt_uint8_t  minor = 0;
 static rt_bool_t   usage_view = RT_TRUE; 
-// static rt_uint32_t usage_load = 0;
+static rt_uint32_t usage_load = 0; 
 
 static void libtest_usage_view_run(rt_bool_t enable)
 {
     if(usage_view != enable)
     {
-        LOG_I("usage view plugin %s.", (enable == RT_TRUE) ? "run" : "close"); 
+        rt_kprintf("usage view plugin %s.\n", (enable == RT_TRUE) ? "run" : "close"); 
     }
     usage_view = enable;
 }
 
 static void libtest_usage_view_entry(void *p)
 {
-    rt_uint8_t index = 0; 
-
     while(1)
     {
         while(usage_view == RT_FALSE)
@@ -56,14 +54,31 @@ static void libtest_usage_view_entry(void *p)
     }
 }
 
-// static void libtest_usage_load_entry(void *p)
-// {
+static void _delay(rt_uint32_t us)
+{
+    rt_int32_t i;
+    for (; us > 0; us--)
+    {
+        i = 30;
+        while (i > 0)
+        {
+            i--;
+        }
+    }
+}
 
-// }
+static void libtest_usage_load_entry(void *p)
+{
+    while(1) 
+    {
+        _delay(usage_load * 10); 
+        rt_thread_mdelay(1); 
+    }
+}
 
 static void libtest_usage_info_outpu(void)
 {
-    LOG_I("cpu usage %.2d.%.2d%%, tick %d.", major, minor, rt_tick_get()); 
+    rt_kprintf("cpu usage %.2d.%.2d%%, tick %d.\n", major, minor, rt_tick_get()); 
 }
 
 static struct optparse_long long_opts[] = 
@@ -126,7 +141,8 @@ static int libtest_usage_cmd(int argc, char **argv)
             break; 
 
         case 'l':
-            //usage_load = (options.optarg == RT_NULL) ? atoi(options.optarg) : usage_load; 
+            usage_load = atoi(options.optarg); 
+            rt_kprintf("Set usage_load : %d\n", usage_load); 
             break; 
         }
     }
@@ -191,31 +207,32 @@ static void libtest_usage_hook(void)
     }
 }
 
-rt_err_t libtest_usage_init(void)
+int libtest_usage_init(void)
 {
     rt_thread_t thread = RT_NULL; 
 
     rt_thread_idle_sethook(libtest_usage_hook);
 
     /* create usage view plugin */ 
-    thread = rt_thread_create("libtest_view", libtest_usage_view_entry, 
+    thread = rt_thread_create("ltview", libtest_usage_view_entry, 
         RT_NULL, 512, FINSH_THREAD_PRIORITY-1, 10); 
     if(thread == RT_NULL)
     {
-        LOG_E("create libtest usage view plugin failed."); 
+        rt_kprintf("create libtest usage view plugin failed.\n"); 
         return RT_EOK; 
     }
     rt_thread_startup(thread); 
 
     /* create usage load plugin */ 
-    // thread = rt_thread_create("libtest_load", libtest_usage_load_entry, 
-    //     RT_NULL, 512, 1, 10); 
-    // if(thread == RT_NULL)
-    // {
-    //     LOG_E("create libtest usage load plugin failed."); 
-    //     return RT_EOK; 
-    // }
-    // rt_thread_startup(thread); 
+    thread = rt_thread_create("ltload", libtest_usage_load_entry, 
+        RT_NULL, 512, 1, 10); 
+    if(thread == RT_NULL)
+    {
+        rt_kprintf("create libtest usage load plugin failed.\n"); 
+        return RT_EOK; 
+    }
+    rt_thread_startup(thread); 
 
     return RT_EOK; 
 }
+INIT_APP_EXPORT(libtest_usage_init); 

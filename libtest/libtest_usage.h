@@ -1,5 +1,5 @@
 /*
- * @File:   libtest_def.h
+ * @File:   libtest_usage.h
  * @Author: liu2guang
  * @Date:   2018-08-21 20:57:10
  *
@@ -11,15 +11,11 @@
  * 2018-08-21     liu2guang    update RT-Thread testcase toolkis.
  */
 
-#ifndef __LIBTEST_DEF_H__
-#define __LIBTEST_DEF_H__
+#ifndef __LIBTEST_USAGE_H__
+#define __LIBTEST_USAGE_H__
 
 #include "rtthread.h"
 
-#define DBG_SECTION_NAME "[LIBTEST] "
-#define DBG_ENABLE          
-#define DBG_COLOR           
-#define DBG_LEVEL        DBG_INFO
-#include "rtdbg.h" 
+int libtest_usage_init(void); 
 
 #endif

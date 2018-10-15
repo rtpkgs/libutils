@@ -12,7 +12,6 @@
  */
 
 #include "usage.h" 
-#include "optparse.h"
 #include "string.h"
 #include <stdlib.h>
 #include "console.h" 

@@ -1,19 +1,19 @@
 /*
- * @File:   libtest_hexdump.c
+ * @File:   hexdump.c
  * @Author: liu2guang
  * @Date:   2018-10-12 14:56:10
  *
  * @LICENSE: MIT
- * https://github.com/liu2guang/optparse/blob/master/LICENSE
+ * https://github.com/rtpkgs/libtest/blob/master/LICENSE
  *
  * Change Logs:
  * Date           Author       Notes
- * 2018-10-12     liu2guang    update RT-Thread testcase toolkis.
+ * 2018-10-12     liu2guang    update RT-Thread hexdump toolkis.
  */
 
-#include "libtest_hexdump.h" 
+#include "hexdump.h" 
 
-void libtest_hexdump(const rt_uint8_t *p, rt_size_t len)
+void hexdump(const rt_uint8_t *p, rt_size_t len)
 {
     unsigned char *buf = (unsigned char*)p;
     int i, j;

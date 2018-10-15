@@ -4,7 +4,7 @@
  * @Date:   2018-08-21 20:57:10
  *
  * @LICENSE: MIT
- * https://github.com/liu2guang/optparse/blob/master/LICENSE
+ * https://github.com/rtpkgs/libtest/blob/master/LICENSE
  *
  * Change Logs:
  * Date           Author       Notes
@@ -17,5 +17,7 @@
 #include "rtthread.h"
 
 int libtest_usage_init(void); 
+rt_uint8_t usage_cpu_major(void); 
+rt_uint8_t usage_cpu_minor(void); 
 
 #endif

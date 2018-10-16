@@ -31,20 +31,22 @@ static struct console _console = {0};
 
 static void console_show(void *p)
 {
-    rt_kprintf("[%.2d.%.2d%%] [%.4ds]", usage_cpu_major(), usage_cpu_minor(), 
-        rt_tick_get()/RT_TICK_PER_SECOND);
+    rt_kprintf("[CPU %.2d.%.2d%%] [TICK %.4ds]\n", usage_cpu_major(), usage_cpu_minor(), rt_tick_get()/RT_TICK_PER_SECOND); 
 }
 
 static void console_entry(void *p)
 {
     rt_kprintf(_RST); 
     rt_thread_mdelay(10); 
+    
+    rt_enter_critical();
     rt_show_version();
     rt_kprintf("%s", finsh_get_prompt()); 
     rt_kprintf(_HCU _SCP _CSI"1;%dr" _CUP(500, 0) _CSI"%dA" _FG_WHITE _BG_BLUE, 
         _console.y-_console.plugin_num-1, _console.plugin_num); 
     rt_kprintf("INFO:%-*.s", _console.x-5, " ");
     rt_kprintf(_SGR_NONE _RCP _SCU);
+    rt_exit_critical();
     
     while(1)
     {
@@ -58,12 +60,23 @@ static void console_entry(void *p)
         }
         
         _console.show(_console.user_data); 
-
         rt_kprintf(_RCP _SCU);
         
         rt_thread_mdelay(RT_TICK_PER_SECOND/_console.rate);
     }
 }
+
+static int console_clear(void)
+{
+    rt_kprintf(_ED2 _CUP(0,0)); 
+    rt_kprintf(_HCU _SCP _CSI"1;%dr" _CUP(500, 0) _CSI"%dA" _FG_WHITE _BG_BLUE, 
+        _console.y-_console.plugin_num-1, _console.plugin_num); 
+    rt_kprintf("INFO:%-*.s", _console.x-5, " ");
+    rt_kprintf(_SGR_NONE _RCP _SCU);
+    
+    return RT_EOK; 
+}
+MSH_CMD_EXPORT_ALIAS(console_clear, clear, console clear.); 
 
 rt_err_t console_init(rt_uint16_t x, rt_uint16_t y, rt_uint8_t rate, rt_uint16_t plugin_num, void (*show)(void *p), void *user_data)
 {
